@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from enum import Enum
+from typing import Optional
 
 app = FastAPI()
 
@@ -12,9 +13,13 @@ BOOKS = {
     'book_5': {'title': 'Title Five', 'author': 'Author Five'},
 }
 
-
+# None 를 안해주면, required 임
 @app.get("/")
-async def read_all_books():
+async def read_all_books(skip_book: Optional[str] = None):
+    if skip_book:
+        new_books = BOOKS.copy()
+        del new_books[skip_book]
+        return new_books
     return BOOKS
 
 
